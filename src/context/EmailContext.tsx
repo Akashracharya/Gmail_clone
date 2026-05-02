@@ -95,18 +95,7 @@ const mockEmails: Email[] = [
     body: 'Experience the all-new Yono App!\n\nBank smarter, invest better, and shop with exclusive discounts. Update your app today to experience the fresh UI and faster transactions.', 
     timestamp: 'Apr 27', isRead: false, folder: 'primary', avatarColor: 'bg-[#1976D2]' 
   },
-  { 
-    id: 'simplilearn_1', 
-    sender: 'Simplilearn',
-    senderEmail: 'no-reply@simplilearn.training', 
-    subject: 'Congratulations! You have unlocked your certificate.', 
-    snippet: 'Hi Akash Acharya,Congrats! You have successfully completed your VLSI Course', 
-    body: 'Hi Akash Acharya,Congrats! You have successfully completed your VLSI Course\n\n---\n\nFrom: Simplilearn • no-reply@simplilearn.training\nTo: akaashracharya@gmail.com\nDate: Apr 27, 2026, 9:43 AM\nSecurity: Standard encryption (TLS).', 
-    timestamp: 'Apr 27', 
-    isRead: true, 
-    folder: 'primary', 
-    avatarColor: 'bg-[#5F6368]' 
-  },
+  
   { 
     id: '13', sender: 'Swiggy', subject: 'Your Swiggy order was delivered supe...', snippet: 'Delivery in 27 mins! ₹186 saved on this...', 
     body: 'Hi Akash,\n\nYour Swiggy order was delivered super fast! \n\nDelivery in: 27 mins\nTotal Savings: ₹186\n\nPlease find your tax invoice attached below.', 
@@ -159,7 +148,19 @@ const mockEmails: Email[] = [
     timestamp: 'Mar 28', isRead: false, folder: 'primary', avatarColor: 'bg-[#EF5350]' 
   },
   { 
-    id: 'mar_3', sender: 'CampusLife', subject: 'akaashracharya@gmail.com : OTP -...', snippet: '763069 is your One Time Password (O...', 
+    id: 'simplilearn_1', 
+    sender: 'Simplilearn',
+    senderEmail: 'no-reply@simplilearn.training', 
+    subject: 'Congratulations! You have unlocked your certificate.', 
+    snippet: 'Hi Akash Acharya,Congrats! You have successfully completed your VLSI Course', 
+    body: 'Hi Akash Acharya,Congrats! You have successfully completed your VLSI Course\n\n---\n\nFrom: Simplilearn • no-reply@simplilearn.training\nTo: akaashracharya@gmail.com\nDate: Apr 27, 2026, 9:43 AM\nSecurity: Standard encryption (TLS).', 
+    timestamp: 'Mar 26', 
+    isRead: true, 
+    folder: 'primary', 
+    avatarColor: 'bg-[#5F6368]' 
+  },
+  { 
+    id: 'mar_3', sender: 'CampusLife', subject: 'akashblazecc@gmail.com : OTP -...', snippet: '763069 is your One Time Password (O...', 
     body: 'Hello,\n\n763069 is your One Time Password (OTP) for account verification. Please do not share this code with anyone.\n\nRegards,\nCampusLife Portal', 
     timestamp: 'Mar 26', isRead: false, folder: 'primary', avatarColor: 'bg-[#757575]' 
   },

@@ -20,8 +20,11 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
   
   const email = emails.find(e => e.id === resolvedParams.id);
   
-  // State for the functional "to me" details dropdown (default open to match screenshot)
+  // State for the functional "to me" details dropdown
   const [showDetails, setShowDetails] = useState(true);
+  
+  // State for "Show quoted text" image reveal
+  const [showQuoted, setShowQuoted] = useState(false);
 
   useEffect(() => {
     if (email && !email.isRead) {
@@ -32,6 +35,16 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
   const handleDelete = () => { if (email) { deleteEmail(email.id); router.push('/'); } };
   const handleArchive = () => { if (email) { archiveEmail(email.id); router.push('/'); } };
   const handleToggleRead = () => { if (email) { toggleReadStatus(email.id); router.push('/'); } };
+
+  // NEW HANDLER: Toggles the quote and ensures details tab closes
+  const handleToggleQuotedText = () => {
+    if (!showQuoted) {
+      setShowQuoted(true);
+      setShowDetails(false); // Hide the From/To/Date tab when showing the quote
+    } else {
+      setShowQuoted(false);
+    }
+  };
 
   if (!email) {
     return (
@@ -48,7 +61,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
   const isSimplilearnMock = email.id === 'simplilearn_1';
   let parsedFrom = `${email.sender} • ${email.senderEmail || 'no-reply@simplilearn.training'}`;
   let parsedTo = 'akaashracharya@gmail.com';
-  let parsedDate = `Apr 27, 2026, 9:43 AM`; // Hardcoded to match your screenshot perfectly
+  let parsedDate = `Apr 27, 2026, 9:43 AM`;
 
   return (
     <div className="flex flex-col h-full min-h-screen bg-[#131314] text-[#E3E3E3] font-sans">
@@ -74,7 +87,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
         <div className="flex items-start justify-between mb-5">
           <h1 className="text-[22px] font-normal text-[#E3E3E3] leading-[1.3] mr-4 tracking-wide font-sans">
             {email.subject}
-            <span className="inline-flex items-center bg-[#3F4A6B] text-[#A8C7FA] text-[11px] font-normal px-1.5 py-0.5 rounded ml-2 align-middle transform -translate-y-[2px]">Inbox</span>
+            <span className="inline-flex items-center bg-[#3F4A6B] text-[#A8C7FA] text-[11px] font-medium px-1.5 py-0.5 rounded ml-2 align-middle transform -translate-y-[2px]">Inbox</span>
           </h1>
           <button className="p-2 -mt-2 -mr-2 hover:bg-[#282a2d] rounded-full text-[#C4C7C5] shrink-0">
             <Star size={24} strokeWidth={1.5} />
@@ -165,11 +178,36 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
               )}
             </AnimatePresence>
 
-            {/* Email Body (Rendered below details) */}
+            {/* Email Body & Quoted Text Toggle */}
             <div className={`text-[#E3E3E3] text-[15px] leading-relaxed whitespace-pre-wrap font-sans font-normal ml-1 ${showDetails ? 'mt-8' : 'mt-4'}`}>
-              <div className="mt-8 text-[#A8C7FA] text-[14px] font-normal cursor-pointer hover:underline">
-                Show quoted text
+              
+              {/* Dynamic Toggle Text */}
+              <div 
+                onClick={handleToggleQuotedText} 
+                className="mt-8 mb-2 text-[#A8C7FA] text-[14px] font-normal cursor-pointer hover:underline inline-block"
+              >
+                {showQuoted ? "Hide quoted text" : "Show quoted text"}
               </div>
+              
+              {/* Animated Image Reveal */}
+              <AnimatePresence>
+                {showQuoted && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="border border-[#36383D] rounded-lg overflow-hidden bg-[#1E1F22] mt-4"
+                  >
+                    <img 
+                      src="/simplilearn.jpg" 
+                      alt="Simplilearn Certificate Details" 
+                      className="w-full h-auto object-contain block"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
             </div>
 
           </div>
@@ -177,8 +215,8 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
 
       </div>
       
-      {/* Fixed Bottom Action Pills (Guaranteed visible with z-50 and fixed bottom-0) */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#131314] px-4 py-4 pb-safe flex items-center gap-3 z-50">
+      {/* Fixed Bottom Action Pills */}
+      <div className="fixed bottom-0 left-0 right-0 bg-[#131314] px-4 py-4 flex items-center gap-3 z-[100]">
           <button className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] font-medium text-[14px] transition-colors active:bg-[#a8bcf0]">
             <Reply size={20} strokeWidth={1.5} className="transform -scale-x-100" /> Reply
           </button>
@@ -186,7 +224,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
             <Forward size={20} strokeWidth={1.5} /> Forward
           </button>
           <button className="flex shrink-0 items-center justify-center p-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] transition-colors active:bg-[#a8bcf0]">
-            <Smile size={12} strokeWidth={1.5} />
+            <Smile size={24} strokeWidth={1.5} />
           </button>
       </div>
 

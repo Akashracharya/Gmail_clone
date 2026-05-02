@@ -197,7 +197,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="border border-[#36383D] rounded-lg overflow-hidden bg-[#1E1F22] mt-4"
+                    className="border border-[#36383D] overflow-hidden bg-[#1E1F22] mt-4"
                   >
                     <img 
                       src="/simplilearn.jpg" 

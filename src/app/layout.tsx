@@ -7,7 +7,7 @@ import { MailProvider } from '@/context/MailContext'
 import { EmailProvider } from '@/context/EmailContext'
 import { MenuProvider } from '@/context/MenuContext' // 1. Import it
 import type { Metadata, Viewport } from "next";
-
+import { Suspense } from 'react';
 
 export const viewport: Viewport = {
   themeColor: "#131314",
@@ -30,7 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MenuProvider> {/* 2. Wrap your app */}
           <EmailProvider>
             <MailProvider>
-              <Header />
+              <Suspense fallback={<header className="h-[68px] bg-[#131314] sticky top-0 z-30 flex items-center px-4"></header>}>
+                <Header />
+              </Suspense>
               <div className="flex flex-1 overflow-hidden relative">
                 <Sidebar />
                 <main className="flex-1 overflow-hidden">

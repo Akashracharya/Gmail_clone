@@ -5,7 +5,7 @@ import Sidebar from '@/components/Sidebar'
 import MobileNav from '@/components/MobileNav'
 import { MailProvider } from '@/context/MailContext'
 import { EmailProvider } from '@/context/EmailContext'
-import { MenuProvider } from '@/context/MenuContext' // 1. Import it
+import { MenuProvider } from '@/context/MenuContext' 
 import type { Metadata, Viewport } from "next";
 import { Suspense } from 'react';
 

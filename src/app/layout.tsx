@@ -10,8 +10,8 @@ import { MenuProvider } from '@/context/MenuContext' // 1. Import it
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Gmail Clone - Dark',
-  description: 'Next.js M3 Gmail Clone',
+  title: 'Gmail',
+  description: 'Gmail',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

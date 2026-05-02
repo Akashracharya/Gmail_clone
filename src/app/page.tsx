@@ -100,7 +100,7 @@ export default function MobileHome({ searchParams }: { searchParams: Promise<{ q
       </div>
 
       {/* Floating Action Button (FAB) */}
-      <button className="fixed bottom-20 right-4 bg-[#D3E3FD] hover:bg-[#b0ccf8] text-[#041E49] rounded-2xl px-5 py-4 flex items-center gap-3 shadow-[0_4px_14px_rgba(0,0,0,0.5)] transition-transform active:scale-95 z-40">
+      <button className="fixed bottom-20 right-4 bg-[#20437c] hover:bg-[#b0ccf8] text-[#bed3f5] rounded-2xl px-5 py-4 flex items-center gap-3 shadow-[0_4px_14px_rgba(0,0,0,0.5)] transition-transform active:scale-95 z-40">
         <Pen size={20} strokeWidth={2} className="fill-current" />
         <span className="font-medium text-sm tracking-wide">Compose</span>
       </button>

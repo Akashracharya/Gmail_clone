@@ -18,6 +18,10 @@ interface ProfileModalProps {
 }
 
 export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
+    // The universal redirect function
+  const handleRedirect = () => {
+    window.open('https://myaccount.google.com/', '_blank');
+  };
     return (
         <AnimatePresence>
             {isOpen && (
@@ -41,7 +45,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
 
                         {/* Main Profile Info */}
                         <div className="flex flex-col items-center mb-6">
-                            <div className="relative mb-4">
+                            <div onClick={handleRedirect} className="relative mb-4">
                                 <div className="w-[84px] h-[84px] rounded-full bg-[#188038] flex items-center justify-center text-white text-[40px] font-normal">
                                     A
                                 </div>
@@ -50,7 +54,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                                 </div>
                             </div>
                             <h1 className="text-[22px] font-normal mb-4">Hi, Akash Blaze!</h1>
-                            <button className="px-5 py-2 rounded-full border border-[#747775] text-[#A8C7FA] text-[14px] font-medium hover:bg-[#282A2D] transition-colors">
+                            <button onClick={handleRedirect} className="px-5 py-2 rounded-full border border-[#747775] text-[#A8C7FA] text-[14px] font-medium hover:bg-[#282A2D] transition-colors">
                                 Manage your Google Account
                             </button>
                         </div>
@@ -67,7 +71,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                             <div className="h-[1px] bg-[#444746]"></div>
 
                             {/* Account 1: Akash */}
-                            <div className="flex items-center justify-between px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
+                            <div onClick={handleRedirect} className="flex items-center justify-between px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 pb-0.5 rounded-full bg-[#b129cc] font-medium text-white flex items-center justify-center text-[20px] shrink-0">
                                         A   
@@ -82,7 +86,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                             <div className="h-[1px] bg-[#444746]"></div>
 
                             {/* Account 2: Sniprr */}
-                            <div className="flex items-center justify-between px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
+                            <div onClick={handleRedirect} className="flex items-center justify-between px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 pb-0.5 rounded-full bg-[#00ACC1] font-medium text-white flex items-center justify-center text-[20px] shrink-0">
                                         S   
@@ -96,7 +100,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                             </div>
                             <div className="h-[1px] bg-[#444746]"></div>
                             {/* Account 3: Zobot */}
-                            <div className="flex items-center justify-between px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
+                            <div onClick={handleRedirect} className="flex items-center justify-between px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 pb-0.5 rounded-full bg-[#ce2525] text-white flex items-center justify-center font-medium text-[20px] shrink-0">
                                         Z
@@ -112,7 +116,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                             <div className="h-[1px] bg-[#444746]"></div>
 
                             {/* Add Account */}
-                            <div className="flex items-center gap-4 px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
+                            <div onClick={handleRedirect} className="flex items-center gap-4 px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
                                 <div className="w-10 h-10 flex items-center justify-center shrink-0">
                                     <Plus size={24} className="text-[#A8C7FA]" />
                                 </div>
@@ -120,7 +124,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                             </div>
 
                             {/* Manage Accounts */}
-                            <div className="flex items-center gap-4 px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
+                            <div onClick={handleRedirect} className="flex items-center gap-4 px-4 py-3 hover:bg-[#282A2D] rounded-[16px] cursor-pointer transition-colors">
                                 <div className="w-10 h-10 flex items-center justify-center shrink-0">
                                     <ManageAccountsIcon />
                                 </div>
@@ -129,7 +133,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                         </div>
 
                         {/* Storage Card */}
-                        <div className="bg-[#1E1F22] rounded-[24px] p-5 mb-6">
+                        <div onClick={handleRedirect} className="bg-[#1E1F22] rounded-[24px] p-5 mb-6">
                             <div className="flex items-center gap-3 mb-4">
                                 <Cloud size={24} className="text-[#A8C7FA] fill-transparent" />
                                 <span className="text-[15px] font-medium text-[#E3E3E3]">1% of 15 GB used</span>

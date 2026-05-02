@@ -20,11 +20,10 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
   
   const email = emails.find(e => e.id === resolvedParams.id);
   
-  // State for the functional "to me" details dropdown
+  // States for interactive elements
   const [showDetails, setShowDetails] = useState(true);
-  
-  // State for "Show quoted text" image reveal
   const [showQuoted, setShowQuoted] = useState(false);
+  const [showSecurityModal, setShowSecurityModal] = useState(false); // NEW: Security Popup State
 
   useEffect(() => {
     if (email && !email.isRead) {
@@ -36,7 +35,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
   const handleArchive = () => { if (email) { archiveEmail(email.id); router.push('/'); } };
   const handleToggleRead = () => { if (email) { toggleReadStatus(email.id); router.push('/'); } };
 
-  // NEW HANDLER: Toggles the quote and ensures details tab closes
+  // Handler: Toggles the quote and ensures details tab closes
   const handleToggleQuotedText = () => {
     if (!showQuoted) {
       setShowQuoted(true);
@@ -81,7 +80,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
       </div>
 
       {/* Main Content Scroll Area */}
-      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-32">
+      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-32 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         
         {/* Subject Header & Star */}
         <div className="flex items-start justify-between mb-5">
@@ -170,7 +169,12 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                       </div>
                       <div>
                         <div className="text-[#E3E3E3]">Standard encryption (TLS).</div>
-                        <div className="text-[#A8C7FA] mt-0.5 cursor-pointer hover:underline">View security details</div>
+                        <div 
+                          onClick={() => setShowSecurityModal(true)} 
+                          className="text-[#A8C7FA] mt-0.5 cursor-pointer hover:underline inline-block"
+                        >
+                          View security details
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -197,7 +201,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="border border-[#36383D] overflow-hidden bg-[#1E1F22] mt-4"
+                    className="border border-[#36383D] rounded-lg overflow-hidden bg-[#1E1F22] mt-4"
                   >
                     <img 
                       src="/simplilearn.jpg" 
@@ -224,9 +228,46 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
             <Forward size={20} strokeWidth={1.5} /> Forward
           </button>
           <button className="flex shrink-0 items-center justify-center p-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] transition-colors active:bg-[#a8bcf0]">
-            <Smile size={24} strokeWidth={1.5} />
+            <Smile size={17} strokeWidth={1.5} />
           </button>
       </div>
+
+      {/* NEW: Exact Android Security Popup Modal */}
+      <AnimatePresence>
+        {showSecurityModal && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center px-4">
+            {/* Dark Overlay Background */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-black/60"
+              onClick={() => setShowSecurityModal(false)}
+            />
+            
+            {/* Modal Box */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="bg-[#282A2D] w-full max-w-[340px] rounded-[28px] p-6 relative z-10 shadow-2xl"
+            >
+              <h2 className="text-[22px] font-normal text-[#E3E3E3] mb-5 tracking-wide">Security details</h2>
+              
+              <div className="flex flex-col gap-[6px] text-[15px] font-normal text-[#E3E3E3] leading-[1.4]">
+                <div>Mailed by: mailer.simplilearn.training</div>
+                <div>Signed by: simplilearn.training</div>
+                <div>
+                  Security: <Lock size={14} className="inline -mt-0.5 mx-0.5 text-[#E3E3E3]" strokeWidth={2} /> Standard encryption <br/>
+                  (TLS). <span className="text-[#A8C7FA] cursor-pointer hover:underline">Learn more</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

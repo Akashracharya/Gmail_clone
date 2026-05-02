@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="flex flex-1 overflow-hidden relative">
                 <Sidebar />
                 <main className="flex-1 overflow-hidden">
-                  <div className="h-full overflow-y-auto">
+                  <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {children}
                   </div>
                 </main>

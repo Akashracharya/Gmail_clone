@@ -6,13 +6,22 @@ import MobileNav from '@/components/MobileNav'
 import { MailProvider } from '@/context/MailContext'
 import { EmailProvider } from '@/context/EmailContext'
 import { MenuProvider } from '@/context/MenuContext' // 1. Import it
+import type { Metadata, Viewport } from "next";
 
+
+export const viewport: Viewport = {
+  themeColor: "#131314",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  title: 'Gmail',
-  description: 'Gmail',
-}
+export const metadata: Metadata = {
+  title: "Gmail",
+  description: "Gmail",
+  manifest: "/manifest.json",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

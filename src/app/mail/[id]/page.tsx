@@ -158,7 +158,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                     className="overflow-hidden"
                   >
                     <div className="bg-[#282A2D] rounded-[12px] p-[16px]">
-                      <div className="grid grid-cols-[55px_1fr] gap-y-3 text-[14px] font-normal">
+                      <div className="grid grid-cols-[49px_1fr] gap-y-3 text-[14px] font-normal">
                         <div className="text-[#C4C7C5]">From</div>
                         <div className="text-[#E3E3E3]">{parsedFrom}</div>
                         <div className="text-[#C4C7C5]">To</div>

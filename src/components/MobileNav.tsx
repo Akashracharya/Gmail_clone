@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function MobileNav() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#131314] flex justify-center gap-16 items-center h-16 z-40 pb-safe">
+    <div className="fixed bottom-0 left-0 right-0 bg-[#1f1e1e] flex justify-center gap-16 items-center h-16 z-40 pb-safe">
       
       {/* Mail Tab (Active) */}
       <Link href="/" className="flex flex-col items-center justify-center relative">

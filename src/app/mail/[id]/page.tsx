@@ -261,7 +261,8 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
       </div>
 
       {/* Fixed Bottom Action Pills (Global) */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#131314] px-4 py-4 flex items-center gap-3 z-[100]">
+      <div className="fixed bottom-16 left-0 right-0 bg-[#131314] px-4 py-4 flex items-center gap-3 z-[100]">
+
         <button className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] font-medium text-[14px] transition-colors active:bg-[#a8bcf0]">
           <Reply size={20} strokeWidth={1.5} className="transform -scale-x-100" /> Reply
         </button>

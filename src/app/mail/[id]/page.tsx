@@ -157,19 +157,27 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-[#282A2D] rounded-[12px] p-[16px]">
-                      <div className="grid grid-cols-[49px_1fr] gap-y-3 text-[14px] font-normal">
+                    <div className="bg-[#282A2D] rounded-[12px] p-[16px] pl-3">
+                      {/* FIXED GRID: changed 1fr to minmax(0,1fr) to allow truncation */}
+                      <div className="grid grid-cols-[41px_minmax(0,1fr)] gap-y-3 text-[14px] font-normal">
                         <div className="text-[#C4C7C5]">From</div>
-                        <div className="text-[#E3E3E3]">{parsedFrom}</div>
+                        {/* ADDED truncate to stop wrapping */}
+                        <div className="text-[#E3E3E3] truncate">{parsedFrom}</div>
+                        
                         <div className="text-[#C4C7C5]">To</div>
-                        <div className="text-[#E3E3E3]">{parsedTo}</div>
+                        {/* ADDED truncate to stop wrapping */}
+                        <div className="text-[#E3E3E3] truncate">{parsedTo}</div>
+                        
                         <div className="text-[#C4C7C5]">Date</div>
-                        <div className="text-[#E3E3E3]">{parsedDate}</div>
+                        {/* ADDED truncate to stop wrapping */}
+                        <div className="text-[#E3E3E3] truncate">{parsedDate}</div>
+                        
                         <div className="flex items-start pt-[2px] text-[#C4C7C5]">
                           <Lock size={16} strokeWidth={1.5} />
                         </div>
-                        <div>
-                          <div className="text-[#E3E3E3]">Standard encryption (TLS).</div>
+                        <div className="min-w-0">
+                          {/* ADDED truncate to stop wrapping */}
+                          <div className="text-[#E3E3E3] truncate">Standard encryption (TLS).</div>
                           <div
                             onClick={() => setShowSecurityModal(true)}
                             className="text-[#A8C7FA] mt-0.5 cursor-pointer hover:underline inline-block"
@@ -222,17 +230,17 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-medium text-xl shrink-0 ${email.avatarColor}`}>
                   {email.sender.charAt(0).toUpperCase()}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                    <span className="font-medium text-[#E3E3E3] text-[15px]">{email.sender}</span>
-                    <span className="text-[13px] text-[#8E918F] hidden md:inline">&lt;{email.senderEmail || 'noreply@domain.com'}&gt;</span>
+                    <span className="font-medium text-[#E3E3E3] text-[15px] truncate max-w-[200px]">{email.sender}</span>
+                    <span className="text-[13px] text-[#8E918F] hidden md:inline truncate">&lt;{email.senderEmail || 'noreply@domain.com'}&gt;</span>
                   </div>
                   <div className="text-[13px] text-[#8E918F]">
                     to me <span className="ml-1 text-[10px]">▼</span>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3 text-[#8E918F]">
+              <div className="flex items-center gap-3 text-[#8E918F] shrink-0">
                 <span className="text-[13px] whitespace-nowrap">{email.timestamp}</span>
                 <button className="p-2 -mr-2 hover:bg-[#282a2d] rounded-full"><MoreVertical size={20} /></button>
               </div>

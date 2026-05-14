@@ -10,7 +10,7 @@ export default function SimplilearnLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F9FA] text-[#333333] font-sans">
-      
+
       {!isCertificatePage && (
         <header className="bg-white border-b border-gray-200 sticky top-0 z-50 flex items-center justify-between px-4 md:px-8 py-3 shadow-sm">
           <div className="flex items-center gap-4">
@@ -18,19 +18,21 @@ export default function SimplilearnLayout({ children }: { children: React.ReactN
               <Menu size={24} className="text-gray-700" />
             </button>
             {/* OFFICIAL LOGO ADDED HERE */}
-            <div 
-              onClick={() => router.push('/simplilearn/explore')}
-              className="cursor-pointer flex items-center"
+            <a
+              href="https://www.simplilearn.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
             >
-              <img src="https://www.simplilearn.com/ice9/new_logo.svgz" alt="Simplilearn" className="h-10 md:h-7" />
-            </div>
+              <img src="https://www.simplilearn.com/ice9/new_logo.svgz" alt="Simplilearn" className="h-9 md:h-7" />
+            </a>
           </div>
 
           <div className="hidden md:flex items-center bg-[#F1F3F4] px-4 py-2 rounded-md w-[400px]">
             <Search size={18} className="text-gray-500 mr-2" />
-            <input 
-              type="text" 
-              placeholder="What do you want to learn?" 
+            <input
+              type="text"
+              placeholder="What do you want to learn?"
               className="bg-transparent border-none outline-none w-full text-sm placeholder-gray-500"
             />
           </div>
@@ -51,14 +53,14 @@ export default function SimplilearnLayout({ children }: { children: React.ReactN
         {!isCertificatePage && (
           <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col py-6">
             <nav className="flex-1 px-4 space-y-1">
-              <button 
-                onClick={() => router.push('/simplilearn/explore')} 
+              <button
+                onClick={() => router.push('/simplilearn/explore')}
                 className={`flex items-center gap-3 px-3 py-2.5 w-full rounded-md font-medium text-sm transition-colors ${pathname === '/simplilearn/explore' ? 'bg-[#E8F0FE] text-[#1172BA]' : 'text-gray-700 hover:bg-gray-50'}`}
               >
                 <Compass size={18} /> Explore Programs
               </button>
-              <button 
-                onClick={() => router.push('/simplilearn')} 
+              <button
+                onClick={() => router.push('/simplilearn')}
                 className={`flex items-center gap-3 px-3 py-2.5 w-full rounded-md font-medium text-sm transition-colors ${pathname === '/simplilearn' ? 'bg-[#E8F0FE] text-[#1172BA]' : 'text-gray-700 hover:bg-gray-50'}`}
               >
                 <BookOpen size={18} /> My Dashboard
@@ -71,8 +73,8 @@ export default function SimplilearnLayout({ children }: { children: React.ReactN
               </button>
             </nav>
             <div className="px-4 mt-auto">
-              <button 
-                onClick={() => router.push('/')} 
+              <button
+                onClick={() => router.push('/')}
                 className="flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 w-full rounded-md font-medium text-sm transition-colors"
               >
                 <LogOut size={18} /> Exit to Mail

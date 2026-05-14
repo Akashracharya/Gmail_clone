@@ -3,8 +3,25 @@ import { useState } from 'react';
 import { PlayCircle, CheckCircle2, ChevronDown, ChevronUp, Lock, FileText, Download, MessageSquare } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-// Mock curriculum data
-const courseModules = [
+// 1. ADDED TYPESCRIPT INTERFACES TO FIX THE VERCEL BUILD ERROR
+interface Lesson {
+  title: string;
+  duration: string;
+  type: string;
+  completed: boolean;
+  active?: boolean; // The '?' tells TypeScript this is optional!
+}
+
+interface CourseModule {
+  id: number;
+  title: string;
+  completed: boolean;
+  locked?: boolean;
+  lessons: Lesson[];
+}
+
+// 2. APPLIED THE INTERFACE TO THE MOCK DATA
+const courseModules: CourseModule[] = [
   {
     id: 1,
     title: "Module 1: Introduction to VLSI",
@@ -57,7 +74,7 @@ export default function CoursePlayerPage() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto h-full flex flex-col lg:flex-row gap-6">
+    <div className="max-w-[1600px] mx-auto h-full flex flex-col lg:flex-row gap-6 p-4 md:p-8">
       
       {/* LEFT COLUMN: Video Player & Course Info */}
       <div className="flex-1 flex flex-col min-w-0">

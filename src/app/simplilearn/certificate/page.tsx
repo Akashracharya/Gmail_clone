@@ -19,7 +19,6 @@ export default function CertificatePage() {
     return (
       <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
         {/* OFFICIAL LOGO ADDED HERE */}
-        <img src="https://www.simplilearn.com/ice9/new_logo.svgz" alt="Simplilearn" className="h-10 mb-8" />
         <div className="relative w-12 h-12">
           <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
           <div className="absolute inset-0 rounded-full border-4 border-[#1172BA] border-t-transparent animate-spin"></div>

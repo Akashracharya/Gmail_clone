@@ -1,77 +1,99 @@
 "use client";
-import { Download, ArrowLeft, CheckCircle, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, MoreVertical, Share2, Download, Award, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function CertificatePage() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
-  return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-10">
-      
-      {/* Back Navigation */}
-      <button 
-        onClick={() => router.back()} 
-        className="flex items-center gap-2 text-gray-600 hover:text-[#1172BA] transition-colors font-medium text-sm mb-2 w-fit px-1"
-      >
-        <ArrowLeft size={18} /> Back to Dashboard
-      </button>
+  useEffect(() => {
+    // 5-SECOND DELAY EXACTLY AS REQUESTED
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000); 
+    
+    return () => clearTimeout(timer);
+  }, []);
 
-      {/* Header Actions Card */}
-      <div className="bg-white p-6 md:p-8 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-[#1D2228] mb-2">Your Certificate</h1>
-          <p className="text-gray-600 text-sm md:text-base flex items-center gap-2">
-            <CheckCircle size={18} className="text-[#188038]" /> 
-            Successfully completed on March 26, 2026
-          </p>
+  // Show the spinner for 5 seconds
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
+        <div className="text-[32px] font-bold text-[#1172BA] tracking-tight mb-8">
+          simplilearn
         </div>
-        
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <button className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-[#1172BA] text-white font-semibold rounded-lg text-sm shadow-sm hover:bg-[#0E5B96] transition-colors">
-            <Download size={18} /> Download PDF
-          </button>
-          <button className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 border border-[#0A66C2] text-[#0A66C2] font-semibold rounded-lg text-sm hover:bg-blue-50 transition-colors">
-            <ExternalLink size={18} /> Add to Profile
-          </button>
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-[#1172BA] border-t-transparent animate-spin"></div>
         </div>
       </div>
+    );
+  }
 
-      {/* Main Certificate Display */}
-      {/* The background pattern gives it a subtle premium document feel */}
-      <div className="bg-white p-4 md:p-8 rounded-xl border border-gray-200 shadow-sm flex justify-center bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]">
-        <div className="relative max-w-full shadow-xl border border-gray-100 rounded-sm overflow-hidden">
-          <img 
-            src="/simplilearn.jpg" 
-            alt="VLSI Course Certificate" 
-            className="w-full h-auto block"
+  // After 5 seconds, show the exact UI from your screenshot
+  return (
+    <div className="flex flex-col min-h-screen bg-white text-[#333333] font-sans overflow-y-auto pb-10">
+      
+      {/* Fake Chrome Custom Tab Header (Simulates external browser popup) */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#F1F3F4] border-b border-gray-300 sticky top-0 z-50">
+        <div className="flex items-center gap-4">
+          <button onClick={() => router.back()} className="p-1 hover:bg-gray-200 rounded-full transition-colors">
+            <X size={24} className="text-[#3C4043]" />
+          </button>
+          <div className="flex flex-col">
+            <span className="text-[14px] font-medium text-[#202124] leading-tight">Simplilearn | Online...</span>
+            <span className="text-[12px] text-[#5F6368] flex items-center gap-1 leading-tight mt-0.5">
+              <Lock size={10} /> simplilearn.com
+            </span>
+          </div>
+        </div>
+        <button className="p-1 hover:bg-gray-200 rounded-full transition-colors">
+          <MoreVertical size={24} className="text-[#3C4043]" />
+        </button>
+      </div>
+
+      {/* Simplilearn Branding Header */}
+      <header className="flex items-center justify-between px-5 py-4 bg-white shadow-sm sticky top-[53px] z-40">
+        <div className="text-[22px] font-bold text-[#1172BA] tracking-tight">simplilearn</div>
+        <div className="w-8 h-8 rounded-full bg-[#188038] text-white flex items-center justify-center text-sm font-medium">
+          A
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-1 px-5 py-8 flex flex-col items-center text-center max-w-2xl mx-auto w-full">
+        <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+          <Award size={36} className="text-[#1172BA]" />
+        </div>
+        
+        <h1 className="text-[24px] font-bold text-[#1D2228] mb-3 leading-tight">
+          Congratulations, Akash!
+        </h1>
+        <p className="text-[15px] text-[#4B5563] mb-8 leading-relaxed px-2">
+          You have successfully completed your <span className="font-semibold text-[#1D2228]">VLSI Course</span>. Here is your official verified certificate.
+        </p>
+
+        {/* Your Custom Certificate Image from public/simplilearn.jpg */}
+        <div className="w-full bg-[#F8F9FA] p-2 rounded-xl border border-gray-200 shadow-sm mb-8 relative">
+          <img
+            src="/my-certificate.jpg"
+            alt="My Verified Certificate"
+            className="w-full h-auto rounded-lg block"
           />
         </div>
-      </div>
 
-      {/* Certificate Metadata Details */}
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-        <h2 className="text-lg font-bold text-[#1D2228] border-b border-gray-100 pb-3">Credential Details</h2>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 pt-2">
-          <div>
-            <div className="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-1">Recipient</div>
-            <div className="font-semibold text-[#1D2228] text-sm">Akash Acharya</div>
-          </div>
-          <div>
-            <div className="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-1">Course</div>
-            <div className="font-semibold text-[#1D2228] text-sm">Advanced VLSI Design</div>
-          </div>
-          <div>
-            <div className="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-1">Issue Date</div>
-            <div className="font-semibold text-[#1D2228] text-sm">March 26, 2026</div>
-          </div>
-          <div>
-            <div className="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-1">Credential ID</div>
-            <div className="font-semibold text-[#1D2228] text-sm font-mono bg-gray-100 px-2 py-0.5 rounded w-fit">SL-VLSI-9824-XT</div>
-          </div>
+        {/* Action Buttons matching the screenshot */}
+        <div className="flex flex-col w-full gap-3">
+          <button className="w-full py-3.5 bg-[#1172BA] text-white font-semibold rounded-lg text-[15px] shadow-md hover:bg-[#0E5B96] transition-colors flex justify-center items-center gap-2">
+            <Download size={20} /> Download Certificate
+          </button>
+          <button className="w-full py-3.5 bg-white border border-[#D1D5DB] text-[#374151] font-semibold rounded-lg text-[15px] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2">
+            <Share2 size={20} /> Share to LinkedIn
+          </button>
         </div>
-      </div>
-
+      </main>
+      
     </div>
   );
 }

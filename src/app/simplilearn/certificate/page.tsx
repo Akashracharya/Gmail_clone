@@ -8,7 +8,6 @@ export default function CertificatePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 5-second delay
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 5000); 
@@ -16,10 +15,11 @@ export default function CertificatePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Show the spinner for 5 seconds WITHOUT the Simplilearn logo
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
+        {/* OFFICIAL LOGO ADDED HERE */}
+        <img src="https://www.simplilearn.com/ice9/new_logo.svgz" alt="Simplilearn" className="h-10 mb-8" />
         <div className="relative w-12 h-12">
           <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
           <div className="absolute inset-0 rounded-full border-4 border-[#1172BA] border-t-transparent animate-spin"></div>
@@ -28,11 +28,9 @@ export default function CertificatePage() {
     );
   }
 
-  // After 5 seconds, show the certificate UI
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#333333] font-sans overflow-y-auto pb-10">
       
-      {/* Fake Chrome Custom Tab Header (Simulates external browser popup) */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#F1F3F4] border-b border-gray-300 sticky top-0 z-50">
         <div className="flex items-center gap-4">
           <button onClick={() => router.back()} className="p-1 hover:bg-gray-200 rounded-full transition-colors">
@@ -50,15 +48,14 @@ export default function CertificatePage() {
         </button>
       </div>
 
-      {/* Simplilearn Branding Header */}
       <header className="flex items-center justify-between px-5 py-4 bg-white shadow-sm sticky top-[53px] z-40">
-        <div className="text-[22px] font-bold text-[#1172BA] tracking-tight">simplilearn</div>
+        {/* OFFICIAL LOGO ADDED HERE */}
+        <img src="https://www.simplilearn.com/ice9/new_logo.svgz" alt="Simplilearn" className="h-10" />
         <div className="w-8 h-8 rounded-full bg-[#188038] text-white flex items-center justify-center text-sm font-medium">
           A
         </div>
       </header>
 
-      {/* Main Content Area */}
       <main className="flex-1 px-5 py-8 flex flex-col items-center text-center max-w-2xl mx-auto w-full">
         <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
           <Award size={36} className="text-[#1172BA]" />
@@ -71,7 +68,6 @@ export default function CertificatePage() {
           You have successfully completed your <span className="font-semibold text-[#1D2228]">VLSI Course</span>. Here is your official verified certificate.
         </p>
 
-        {/* Your Custom Certificate Image */}
         <div className="w-full bg-[#F8F9FA] p-2 rounded-xl border border-gray-200 shadow-sm mb-8 relative">
           <img
             src="/my-certificate.jpg"
@@ -80,7 +76,6 @@ export default function CertificatePage() {
           />
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col w-full gap-3">
           <button className="w-full py-3.5 bg-[#1172BA] text-white font-semibold rounded-lg text-[15px] shadow-md hover:bg-[#0E5B96] transition-colors flex justify-center items-center gap-2">
             <Download size={20} /> Download Certificate

@@ -42,7 +42,6 @@ const DashboardSkeleton = () => (
   </div>
 );
 
-
 export default function SimplilearnDashboard() {
   const router = useRouter();
   const [loadPhase, setLoadPhase] = useState<'spinner' | 'skeleton' | 'content'>('spinner');
@@ -65,6 +64,8 @@ export default function SimplilearnDashboard() {
   if (loadPhase === 'spinner') {
     return (
       <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
+        {/* OFFICIAL LOGO ADDED HERE */}
+        <img src="https://www.simplilearn.com/ice9/new_logo.svgz" alt="Simplilearn" className="h-10 mb-8" />
         <div className="relative w-12 h-12">
           <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
           <div className="absolute inset-0 rounded-full border-4 border-[#1172BA] border-t-transparent animate-spin"></div>
@@ -91,16 +92,17 @@ export default function SimplilearnDashboard() {
           className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col md:flex-row hover:shadow-md transition-shadow cursor-pointer group"
         >
           <div className="w-full md:w-[280px] h-[160px] bg-slate-800 relative flex-shrink-0 overflow-hidden">
-            
-            {/* Thumbnail */}
             <img 
               src="/thumbnail.jpg" 
               alt="Course Thumbnail" 
               className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://www.transparenttextures.com/patterns/cubes.png';
+              }}
             />
-
-          
-            
+            <div className="absolute inset-0 flex items-center justify-center">
+              
+            </div>
             <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
               Module 4
             </div>
@@ -115,11 +117,11 @@ export default function SimplilearnDashboard() {
             
             <div className="mt-auto">
               <div className="flex justify-between text-xs text-gray-600 mb-1 font-medium">
-                <span>93% Completed</span>
+                <span>92% Completed</span>
                 <span>12 hrs left</span>
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-[#188038] w-[93%] rounded-full"></div>
+                <div className="h-full bg-[#188038] w-[92%] rounded-full"></div>
               </div>
             </div>
           </div>

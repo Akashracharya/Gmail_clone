@@ -4,7 +4,8 @@ import { PlayCircle, Clock, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const DashboardSkeleton = () => (
-  <div className="max-w-5xl mx-auto space-y-8 w-full animate-pulse">
+  // ADDED padding here (px-4 py-6 md:p-8)
+  <div className="max-w-5xl mx-auto space-y-8 w-full animate-pulse px-4 py-6 md:p-8">
     <section>
       <div className="h-8 bg-gray-200 rounded-md w-64 mb-4"></div>
       <div className="h-4 bg-gray-200 rounded-md w-96 max-w-full"></div>
@@ -68,15 +69,8 @@ export default function SimplilearnDashboard() {
   if (loadPhase === 'spinner') {
     return (
       <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
-        <div className="text-[32px] font-bold text-[#1172BA] tracking-tight mb-8">
-          simplilearn
-        </div>
-        
-        {/* Authentic Circular Spinner matching your screenshot */}
         <div className="relative w-12 h-12">
-          {/* Background track */}
           <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
-          {/* Spinning blue section */}
           <div className="absolute inset-0 rounded-full border-4 border-[#1172BA] border-t-transparent animate-spin"></div>
         </div>
       </div>
@@ -90,7 +84,8 @@ export default function SimplilearnDashboard() {
 
   // --- RENDER PHASE 3: Actual Dashboard ---
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
+    // ADDED padding here (px-4 py-6 md:p-8)
+    <div className="max-w-5xl mx-auto space-y-8 px-4 py-6 md:p-8">
       <section>
         <h1 className="text-2xl md:text-3xl font-bold text-[#1D2228] mb-2">Welcome back, Akash!</h1>
         <p className="text-gray-600 text-sm md:text-base">Pick up right where you left off and achieve your learning goals.</p>

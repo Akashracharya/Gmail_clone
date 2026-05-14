@@ -8,7 +8,7 @@ export default function CertificatePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 5-SECOND DELAY EXACTLY AS REQUESTED
+    // 5-second delay
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 5000); 
@@ -16,13 +16,10 @@ export default function CertificatePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Show the spinner for 5 seconds
+  // Show the spinner for 5 seconds WITHOUT the Simplilearn logo
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
-        <div className="text-[32px] font-bold text-[#1172BA] tracking-tight mb-8">
-          simplilearn
-        </div>
         <div className="relative w-12 h-12">
           <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
           <div className="absolute inset-0 rounded-full border-4 border-[#1172BA] border-t-transparent animate-spin"></div>
@@ -31,7 +28,7 @@ export default function CertificatePage() {
     );
   }
 
-  // After 5 seconds, show the exact UI from your screenshot
+  // After 5 seconds, show the certificate UI
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#333333] font-sans overflow-y-auto pb-10">
       
@@ -74,16 +71,16 @@ export default function CertificatePage() {
           You have successfully completed your <span className="font-semibold text-[#1D2228]">VLSI Course</span>. Here is your official verified certificate.
         </p>
 
-        {/* Your Custom Certificate Image from public/simplilearn.jpg */}
+        {/* Your Custom Certificate Image */}
         <div className="w-full bg-[#F8F9FA] p-2 rounded-xl border border-gray-200 shadow-sm mb-8 relative">
           <img
             src="/my-certificate.jpg"
-            alt="My Verified Certificate"
+            alt="VLSI Certificate"
             className="w-full h-auto rounded-lg block"
           />
         </div>
 
-        {/* Action Buttons matching the screenshot */}
+        {/* Action Buttons */}
         <div className="flex flex-col w-full gap-3">
           <button className="w-full py-3.5 bg-[#1172BA] text-white font-semibold rounded-lg text-[15px] shadow-md hover:bg-[#0E5B96] transition-colors flex justify-center items-center gap-2">
             <Download size={20} /> Download Certificate

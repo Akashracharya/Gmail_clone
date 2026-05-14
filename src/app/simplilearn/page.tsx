@@ -92,17 +92,14 @@ export default function SimplilearnDashboard() {
         >
           <div className="w-full md:w-[280px] h-[160px] bg-slate-800 relative flex-shrink-0 overflow-hidden">
             
-            {/* THUMBNAIL ADDED HERE */}
+            {/* Thumbnail */}
             <img 
               src="/thumbnail.jpg" 
               alt="Course Thumbnail" 
               className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://www.transparenttextures.com/patterns/cubes.png';
-              }}
             />
-            
-            
+
+          
             
             <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
               Module 4
@@ -118,11 +115,11 @@ export default function SimplilearnDashboard() {
             
             <div className="mt-auto">
               <div className="flex justify-between text-xs text-gray-600 mb-1 font-medium">
-                <span>92% Completed</span>
+                <span>93% Completed</span>
                 <span>12 hrs left</span>
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-[#188038] w-[92%] rounded-full"></div>
+                <div className="h-full bg-[#188038] w-[93%] rounded-full"></div>
               </div>
             </div>
           </div>

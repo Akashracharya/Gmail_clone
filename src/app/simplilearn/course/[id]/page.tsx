@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { PlayCircle, CheckCircle2, ChevronDown, ChevronUp, Lock, FileText, Download, MessageSquare } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+// 1. TYPESCRIPT INTERFACES 
 interface Lesson {
   title: string;
   duration: string;
@@ -19,6 +20,7 @@ interface CourseModule {
   lessons: Lesson[];
 }
 
+// 2. MOCK DATA
 const courseModules: CourseModule[] = [
   {
     id: 1,
@@ -65,7 +67,7 @@ export default function CoursePlayerPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedModules, setExpandedModules] = useState<number[]>([3]); 
   
-  // Simplified to only 'idle' or 'loading'
+  // State to manage the video click
   const [videoState, setVideoState] = useState<'idle' | 'loading'>('idle');
 
   const toggleModule = (id: number) => {
@@ -75,7 +77,6 @@ export default function CoursePlayerPage() {
   };
 
   const handlePlayVideo = () => {
-    // When clicked, it just loads infinitely over the thumbnail
     if (videoState === 'idle') {
       setVideoState('loading');
     }
@@ -87,18 +88,19 @@ export default function CoursePlayerPage() {
       {/* LEFT COLUMN: Video Player & Course Info */}
       <div className="flex-1 flex flex-col min-w-0">
         
+        {/* Breadcrumb */}
         <div className="text-xs font-medium text-gray-500 mb-3 flex gap-2">
           <span className="cursor-pointer hover:text-[#1172BA]" onClick={() => router.push('/simplilearn')}>Dashboard</span> 
           <span>/</span> 
           <span>Advanced VLSI Design</span>
         </div>
 
-        {/* --- INTERACTIVE VIDEO PLAYER (Thumbnail + Loader Only) --- */}
+        {/* --- INTERACTIVE VIDEO PLAYER --- */}
         <div 
           onClick={handlePlayVideo}
           className="w-full aspect-video bg-black rounded-xl overflow-hidden relative shadow-lg flex items-center justify-center group cursor-pointer"
         >
-          {/* Custom Thumbnail ALWAYS Visible */}
+          {/* Custom Thumbnail */}
           <img 
             src="/thumbnail.jpg" 
             alt="Course Thumbnail" 
@@ -108,21 +110,22 @@ export default function CoursePlayerPage() {
             }}
           />
 
-          {/* The Play Button (Only show when idle) */}
+          {/* Pure SVG Play Button */}
           {videoState === 'idle' && (
-            <div className="relative z-10 w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-[#1172BA]/90 group-hover:scale-110 transition-all duration-300 shadow-xl">
-              <PlayCircle size={40} className="text-white ml-2" fill="white" />
+            <div className="relative z-10 w-20 h-20 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover:bg-[#1172BA] group-hover:border-[#1172BA] group-hover:scale-110 transition-all duration-300 shadow-2xl">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" className="ml-2">
+                <path d="M5 3L19 12L5 21V3Z" fill="white"/>
+              </svg>
             </div>
           )}
 
-          {/* The Loading Spinner (Show when clicked, loops infinitely) */}
+          {/* The Loading Spinner */}
           {videoState === 'loading' && (
             <div className="relative z-10 w-16 h-16">
               <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
               <div className="absolute inset-0 rounded-full border-4 border-white border-t-transparent animate-spin shadow-lg"></div>
             </div>
           )}
-
         </div>
 
         <h1 className="text-2xl font-bold text-[#1D2228] mt-5 mb-2">Physical Design Overview</h1>
@@ -195,6 +198,7 @@ export default function CoursePlayerPage() {
         <div className="overflow-y-auto max-h-[600px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {courseModules.map((module) => (
             <div key={module.id} className="border-b border-gray-100 last:border-0">
+              {/* Module Header */}
               <div 
                 onClick={() => !module.locked && toggleModule(module.id)}
                 className={`p-4 flex items-center justify-between cursor-pointer transition-colors ${module.locked ? 'bg-gray-50/50 opacity-60' : 'hover:bg-gray-50'}`}
@@ -216,6 +220,7 @@ export default function CoursePlayerPage() {
                 )}
               </div>
 
+              {/* Module Lessons */}
               {expandedModules.includes(module.id) && !module.locked && (
                 <div className="bg-gray-50/50 pb-2">
                   {module.lessons.map((lesson, index) => (
@@ -235,7 +240,7 @@ export default function CoursePlayerPage() {
                           {lesson.title}
                         </span>
                         <span className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                          {lesson.type === 'video' ? <PlayCircle size={12} /> : <FileText size={12} />} 
+                          {lesson.type === 'video' ? <PlayCircle size={12} className="text-gray-400" /> : <FileText size={12} className="text-gray-400" />} 
                           {lesson.duration}
                         </span>
                       </div>

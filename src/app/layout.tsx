@@ -15,27 +15,28 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
-  // Detect if we are reading any email
+  // Detect our current app context
   const isMailReadingPage = pathname.startsWith('/mail/');
+  const isSimplilearnApp = pathname.startsWith('/simplilearn');
 
   return (
-    <html lang="en" className="dark">
-      {/* 1. We keep pb-16 ALWAYS on mobile to reserve space for the bottom nav */}
-      <body className={`${inter.className} h-screen flex flex-col overflow-hidden pb-16 md:pb-0 bg-[#131314] text-[#E3E3E3]`}>
+    // Switch completely out of dark mode when in the Simplilearn app
+    <html lang="en" className={!isSimplilearnApp ? "dark" : ""}>
+      <body className={`${inter.className} h-screen flex flex-col overflow-hidden ${!isSimplilearnApp ? 'pb-16 md:pb-0 bg-[#131314] text-[#E3E3E3]' : 'bg-[#F8F9FA] text-[#333333]'}`}>
         <MenuProvider>
           <EmailProvider>
             <MailProvider>
               
-              {/* 2. Hide top Header ONLY when reading mail */}
-              {!isMailReadingPage && (
+              {/* Hide top Header ONLY when reading mail OR inside Simplilearn */}
+              {!isMailReadingPage && !isSimplilearnApp && (
                 <Suspense fallback={<header className="h-[68px] bg-[#131314] sticky top-0 z-30 flex items-center px-4"></header>}>
                   <Header />
                 </Suspense>
               )}
               
               <div className="flex flex-1 overflow-hidden relative">
-                {/* 3. Hide Sidebar ONLY when reading mail */}
-                {!isMailReadingPage && (
+                {/* Hide Sidebar ONLY when reading mail OR inside Simplilearn */}
+                {!isMailReadingPage && !isSimplilearnApp && (
                   <Suspense fallback={<aside className="w-72 hidden md:block" />}>
                     <Sidebar />
                   </Suspense>
@@ -48,8 +49,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </main>
               </div>
               
-              {/* 4. Bottom Nav is now OUTSIDE any conditional checks so it shows on every page */}
-              <MobileNav />
+              {/* Hide the Gmail Bottom Nav completely when inside Simplilearn */}
+              {!isSimplilearnApp && <MobileNav />}
               
             </MailProvider>
           </EmailProvider>

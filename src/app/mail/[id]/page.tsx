@@ -156,6 +156,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                     exit={{ height: 0, opacity: 0, marginTop: 0 }}
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                     className="overflow-hidden"
+                    
                   >
                     <div className="bg-[#282A2D] rounded-[12px] p-[16px] pl-3">
                       {/* FIXED GRID: changed 1fr to minmax(0,1fr) to allow truncation */}
@@ -208,6 +209,7 @@ export default function ReadMail({ params }: { params: Promise<{ id: string }> }
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
                       className="border border-[#36383D] overflow-hidden bg-[#1E1F22] mt-4"
+                      onClick={() => router.push('/simplilearn')}
                     >
                       <img
                         src="/simplilearn.jpg"

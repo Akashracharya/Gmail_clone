@@ -1,321 +1,220 @@
 "use client";
-import { ArrowLeft, Archive, Trash2, MailOpen, Clock, MoreVertical, Reply, Forward, Lock, Star, Sparkles, Smile, ChevronDown, ChevronUp, Download } from 'lucide-react';
+import { useState } from 'react';
+import { CheckCircle2, ChevronDown, ChevronUp, Lock, FileText, Download, MessageSquare, PlayCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEmails } from '@/context/EmailContext';
-import { useEffect, use, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-// Reusable generic profile avatar to match Google's default perfectly for Simplilearn
-const GenericAvatar = () => (
-  <div className="w-10 h-10 rounded-full bg-[#5F6368] flex items-center justify-center shrink-0 overflow-hidden relative">
-    <div className="w-[15px] h-[15px] bg-[#E3E3E3] rounded-full absolute top-[8px]"></div>
-    <div className="w-[30px] h-[30px] bg-[#E3E3E3] rounded-full absolute top-[26px]"></div>
-  </div>
-);
+interface Lesson {
+  title: string;
+  duration: string;
+  type: string;
+  completed: boolean;
+  active?: boolean;
+}
 
-export default function ReadMail({ params }: { params: Promise<{ id: string }> }) {
+interface CourseModule {
+  id: number;
+  title: string;
+  completed: boolean;
+  locked?: boolean;
+  lessons: Lesson[];
+}
+
+const courseModules: CourseModule[] = [
+  {
+    id: 1,
+    title: "Module 1: Introduction to VLSI",
+    completed: true,
+    lessons: [
+      { title: "What is VLSI Design?", duration: "12:45", type: "video", completed: true },
+      { title: "History and Evolution", duration: "15:20", type: "video", completed: true },
+    ]
+  },
+  {
+    id: 2,
+    title: "Module 2: Digital Logic Circuits",
+    completed: true,
+    lessons: [
+      { title: "Combinational Logic", duration: "22:10", type: "video", completed: true },
+      { title: "Sequential Logic", duration: "18:30", type: "video", completed: true },
+      { title: "Module 2 Assessment", duration: "30 mins", type: "quiz", completed: true },
+    ]
+  },
+  {
+    id: 3,
+    title: "Module 3: Physical Design Flow",
+    completed: false,
+    lessons: [
+      { title: "Physical Design Overview", duration: "14:15", type: "video", completed: false, active: true },
+      { title: "Floorplanning and Placement", duration: "25:00", type: "video", completed: false },
+      { title: "Clock Tree Synthesis (CTS)", duration: "20:45", type: "video", completed: false },
+    ]
+  },
+  {
+    id: 4,
+    title: "Module 4: Advanced Architecture",
+    completed: false,
+    locked: true,
+    lessons: [
+      { title: "System on Chip (SoC)", duration: "18:00", type: "video", completed: false },
+    ]
+  }
+];
+
+export default function CoursePlayerPage() {
   const router = useRouter();
-  const resolvedParams = use(params);
-  const { emails, deleteEmail, archiveEmail, markAsRead, toggleReadStatus } = useEmails();
+  const [activeTab, setActiveTab] = useState('overview');
+  const [expandedModules, setExpandedModules] = useState<number[]>([3]);
 
-  const email = emails.find(e => e.id === resolvedParams.id);
+  const [videoState, setVideoState] = useState<'idle' | 'loading'>('idle');
 
-  // States for Simplilearn interactive elements
-  const [showDetails, setShowDetails] = useState(true);
-  const [showQuoted, setShowQuoted] = useState(false);
-  const [showSecurityModal, setShowSecurityModal] = useState(false);
+  const toggleModule = (id: number) => {
+    setExpandedModules(prev =>
+      prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
+    );
+  };
 
-  useEffect(() => {
-    if (email && !email.isRead) {
-      markAsRead(email.id);
-    }
-  }, [email, markAsRead]);
-
-  const handleDelete = () => { if (email) { deleteEmail(email.id); router.push('/'); } };
-  const handleArchive = () => { if (email) { archiveEmail(email.id); router.push('/'); } };
-  const handleToggleRead = () => { if (email) { toggleReadStatus(email.id); router.push('/'); } };
-
-  const handleToggleQuotedText = () => {
-    if (!showQuoted) {
-      setShowQuoted(true);
-      setShowDetails(false);
-    } else {
-      setShowQuoted(false);
+  const handlePlayVideo = () => {
+    if (videoState === 'idle') {
+      setVideoState('loading');
     }
   };
 
-  if (!email) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-[#131314] text-gray-500">
-        <p className="mb-4">Message has been deleted or archived.</p>
-        <button onClick={() => router.push('/')} className="text-[#A8C7FA] hover:underline font-normal">
-          Return to Inbox
-        </button>
-      </div>
-    );
-  }
-
-  // Check if this is the Simplilearn email
-  const isSimplilearnMock = email.id === 'simplilearn_1' || email.sender.toLowerCase().includes('simplilearn');
-
-  // Simplilearn exact string parsing
-  let parsedFrom = `${email.sender} • ${email.senderEmail || 'no-reply@simplilearn.training'}`;
-  let parsedTo = 'akashblazecc@gmail.com';
-  let parsedDate = `Mar 26, 2026, 10:12 AM`;
-
   return (
-    <div className="flex flex-col h-full min-h-screen bg-[#131314] text-[#E3E3E3] font-sans">
+    <div className="max-w-[1600px] mx-auto h-full flex flex-col lg:flex-row gap-6 p-4 md:p-8">
 
-      {/* Top Action Bar (Global for all emails) */}
-      <div className="flex items-center justify-between px-2 py-2 sticky top-0 bg-[#131314] z-20">
-        <div className="flex items-center text-[#C4C7C5]">
-          <button onClick={() => router.push('/')} className="p-3 hover:bg-[#282a2d] rounded-full transition-colors"><ArrowLeft size={24} strokeWidth={2} /></button>
+      {/* LEFT COLUMN: Video Player & Course Info */}
+      <div className="flex-1 flex flex-col min-w-0">
+
+        <div className="text-xs font-medium text-gray-500 mb-3 flex gap-2">
+          <span className="cursor-pointer hover:text-[#1172BA]" onClick={() => router.push('/simplilearn')}>Dashboard</span>
+          <span>/</span>
+          <span>Advanced VLSI Design</span>
         </div>
-        <div className="flex items-center gap-0.5 text-[#C4C7C5]">
-          <button className="p-3 hover:bg-[#282a2d] rounded-full">
-            <img
-              src="/gemini.svg"
-              alt="My Custom Logo"
-              className="w-[24px] h-[24px] object-contain opacity-80 hover:opacity-100 transition-opacity"
-            />
-          </button>
-          <button onClick={handleArchive} className="p-3 hover:bg-[#282a2d] rounded-full"><Download size={22} strokeWidth={2} className="transform rotate-180" /></button>
-          <button onClick={handleDelete} className="p-3 hover:bg-[#282a2d] rounded-full"><Trash2 size={22} strokeWidth={2} /></button>
-          <button onClick={handleToggleRead} className="p-3 hover:bg-[#282a2d] rounded-full"><MailOpen size={22} strokeWidth={2} /></button>
-          <button className="p-3 hover:bg-[#282a2d] rounded-full"><MoreVertical size={22} strokeWidth={2} /></button>
+
+        {/* --- INTERACTIVE VIDEO PLAYER --- */}
+        
+
+        <h1 className="text-2xl font-bold text-[#1D2228] mt-5 mb-2">Physical Design Overview</h1>
+
+        {/* Tabs */}
+        <div className="flex items-center gap-6 border-b border-gray-200 mt-4">
+          {['overview', 'q&a', 'notes', 'downloads'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-3 text-sm font-semibold capitalize transition-colors relative ${activeTab === tab ? 'text-[#1172BA]' : 'text-gray-500 hover:text-[#1D2228]'
+                }`}
+            >
+              {tab}
+              {activeTab === tab && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1172BA] rounded-t-full"></div>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        <div className="py-6 text-gray-600 text-sm leading-relaxed">
+          {activeTab === 'overview' && (
+            <div className="space-y-4">
+              <p>In this lesson, we will cover the foundational concepts of the Physical Design flow in VLSI. You will learn about the translation of a logical synthesis netlist into a manufacturable layout.</p>
+              <h3 className="font-bold text-[#1D2228] mt-4">Key Learning Objectives:</h3>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>Understand the transition from RTL to GDSII.</li>
+                <li>Identify the key stages: Floorplanning, Placement, CTS, and Routing.</li>
+                <li>Recognize the importance of timing constraints in physical layout.</li>
+              </ul>
+            </div>
+          )}
+          {activeTab === 'downloads' && (
+            <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <div className="flex items-center gap-3">
+                <FileText className="text-[#1172BA]" size={24} />
+                <div>
+                  <div className="font-bold text-[#1D2228]">Lesson Slides (PDF)</div>
+                  <div className="text-xs text-gray-500">2.4 MB</div>
+                </div>
+              </div>
+              <button className="p-2 hover:bg-gray-200 rounded-full text-[#1172BA] transition-colors">
+                <Download size={20} />
+              </button>
+            </div>
+          )}
+          {activeTab === 'q&a' && (
+            <div className="text-center py-8">
+              <MessageSquare size={40} className="mx-auto text-gray-300 mb-3" />
+              <div className="font-bold text-[#1D2228] mb-1">Have a question?</div>
+              <p className="text-gray-500 mb-4">Ask the instructor or discuss with peers.</p>
+              <button className="px-4 py-2 bg-[#1172BA] text-white rounded font-medium hover:bg-[#0E5B96] transition-colors">
+                Ask a Question
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Main Content Scroll Area - SCROLLBAR HIDDEN */}
-      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-32 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-
-        {/* Subject Header & Star */}
-        <div className="flex items-start justify-between mb-5">
-          <h1 className="text-[22px] font-normal text-[#E3E3E3] leading-[1.3] mr-4 tracking-wide font-sans">
-            {email.subject}
-            <span className="inline-flex items-center bg-[#3F4A6B] text-[#A8C7FA] text-[11px] font-normal px-1.5 py-0.5 rounded ml-2 align-middle transform -translate-y-[2px]">Inbox</span>
-          </h1>
-          <button className="p-2 -mt-2 -mr-2 hover:bg-[#282a2d] rounded-full text-[#C4C7C5] shrink-0">
-            <Star size={24} strokeWidth={1.5} />
-          </button>
+      {/* RIGHT COLUMN: Course Curriculum Sidebar */}
+      <div className="w-full lg:w-[380px] shrink-0 bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col h-fit md:sticky md:top-20">
+        <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+          <h2 className="font-bold text-[#1D2228]">Course Content</h2>
+          <span className="text-xs font-bold bg-green-100 text-[#188038] px-2 py-1 rounded">92%</span>
         </div>
 
-        {isSimplilearnMock ? (
-          // ==========================================
-          // 1. SIMPLILEARN PIXEL-PERFECT MOCK LAYOUT
-          // ==========================================
-          <div className="flex flex-col gap-[2px]">
-            {/* Collapsed Snippet Card */}
-            <div className="bg-[#1E1F22] rounded-t-2xl rounded-b-[4px] p-4 flex items-start gap-3 cursor-pointer hover:bg-[#25262A] transition-colors">
-              <GenericAvatar />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="font-medium text-[#E3E3E3] text-[15px]">{email.sender}</span>
-                  <span className="text-[12px] text-[#C4C7C5]">Mar 26</span>
+        <div className="overflow-y-auto max-h-[600px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {courseModules.map((module) => (
+            <div key={module.id} className="border-b border-gray-100 last:border-0">
+              <div
+                onClick={() => !module.locked && toggleModule(module.id)}
+                className={`p-4 flex items-center justify-between cursor-pointer transition-colors ${module.locked ? 'bg-gray-50/50 opacity-60' : 'hover:bg-gray-50'}`}
+              >
+                <div className="flex flex-col min-w-0 pr-4">
+                  <span className={`text-sm font-bold truncate ${module.locked ? 'text-gray-400' : 'text-[#1D2228]'}`}>
+                    {module.title}
+                  </span>
+                  <span className="text-xs text-gray-500 mt-1">
+                    0 / {module.lessons.length} completed
+                  </span>
                 </div>
-                <div className="text-[14px] text-[#C4C7C5] leading-[1.4] font-normal">
-                  Hi Akash Acharya,Congrats! You have<br />successfully completed your VLSI Course
-                </div>
+                {module.locked ? (
+                  <Lock size={18} className="text-gray-400 shrink-0" />
+                ) : (
+                  expandedModules.includes(module.id) ?
+                    <ChevronUp size={20} className="text-gray-500 shrink-0" /> :
+                    <ChevronDown size={20} className="text-gray-500 shrink-0" />
+                )}
               </div>
-            </div>
 
-            {/* Expanded Main Email Card */}
-            <div className="bg-[#1E1F22] p-4 pb-6 rounded-t-[4px] rounded-b-2xl">
-
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <GenericAvatar />
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-medium text-[#E3E3E3] text-[15px]">{email.sender}</span>
-                      <span className="text-[12px] text-[#C4C7C5] ml-1">Mar 26</span>
-                    </div>
+              {expandedModules.includes(module.id) && !module.locked && (
+                <div className="bg-gray-50/50 pb-2">
+                  {module.lessons.map((lesson, index) => (
                     <div
-                      onClick={() => setShowDetails(!showDetails)}
-                      className="flex items-center gap-1 text-[13px] text-[#C4C7C5] cursor-pointer w-fit hover:text-[#E3E3E3] transition-colors select-none font-normal"
+                      key={index}
+                      className={`flex items-start gap-3 py-3 pl-4 pr-4 cursor-pointer transition-colors ${lesson.active ? 'bg-blue-50 border-l-4 border-[#1172BA] pl-3' : 'hover:bg-gray-100 border-l-4 border-transparent'}`}
                     >
-                      to me
-                      {showDetails ? <ChevronUp size={14} strokeWidth={2} /> : <ChevronDown size={14} strokeWidth={2} />}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center text-[#C4C7C5] gap-1">
-                  <button className="p-2 hover:bg-[#2D2F33] rounded-full transition-colors"><Smile size={20} strokeWidth={2} /></button>
-                  <button className="p-2 hover:bg-[#2D2F33] rounded-full transition-colors"><Reply size={20} strokeWidth={2} className="transform -scale-x-100" /></button>
-                  <button className="p-2 hover:bg-[#2D2F33] rounded-full transition-colors"><MoreVertical size={20} strokeWidth={2} /></button>
-                </div>
-              </div>
-
-              {/* Animated Details */}
-              <AnimatePresence>
-                {showDetails && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                    animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
-                    exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                    transition={{ duration: 0.25, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                    
-                  >
-                    <div className="bg-[#282A2D] rounded-[12px] p-[16px] pl-3">
-                      {/* FIXED GRID: changed 1fr to minmax(0,1fr) to allow truncation */}
-                      <div className="grid grid-cols-[41px_minmax(0,1fr)] gap-y-3 text-[14px] font-normal">
-                        <div className="text-[#C4C7C5]">From</div>
-                        {/* ADDED truncate to stop wrapping */}
-                        <div className="text-[#E3E3E3] truncate">{parsedFrom}</div>
-                        
-                        <div className="text-[#C4C7C5]">To</div>
-                        {/* ADDED truncate to stop wrapping */}
-                        <div className="text-[#E3E3E3] truncate">{parsedTo}</div>
-                        
-                        <div className="text-[#C4C7C5]">Date</div>
-                        {/* ADDED truncate to stop wrapping */}
-                        <div className="text-[#E3E3E3] truncate">{parsedDate}</div>
-                        
-                        <div className="flex items-start pt-[2px] text-[#C4C7C5]">
-                          <Lock size={16} strokeWidth={1.5} />
-                        </div>
-                        <div className="min-w-0">
-                          {/* ADDED truncate to stop wrapping */}
-                          <div className="text-[#E3E3E3] truncate">Standard encryption (TLS).</div>
-                          <div
-                            onClick={() => setShowSecurityModal(true)}
-                            className="text-[#A8C7FA] mt-0.5 cursor-pointer hover:underline inline-block"
-                          >
-                            View security details
-                          </div>
-                        </div>
+                      <div className="mt-0.5 shrink-0">
+                        {lesson.completed ? (
+                          <CheckCircle2 size={18} className="text-[#188038]" />
+                        ) : (
+                          <div className={`w-[18px] h-[18px] rounded-full border-2 ${lesson.active ? 'border-[#1172BA]' : 'border-gray-300'}`}></div>
+                        )}
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className={`text-sm font-medium leading-tight ${lesson.active ? 'text-[#1172BA]' : 'text-gray-700'}`}>
+                          {lesson.title}
+                        </span>
+                        <span className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                          {lesson.type === 'video' ? <PlayCircle size={12} className="text-gray-400" /> : <FileText size={12} className="text-gray-400" />}
+                          {lesson.duration}
+                        </span>
                       </div>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Quoted Text Toggle & Image */}
-              <div className={`text-[#E3E3E3] text-[15px] leading-relaxed whitespace-pre-wrap font-sans font-normal ml-1 ${showDetails ? 'mt-8' : 'mt-4'}`}>
-                <div
-                  onClick={handleToggleQuotedText}
-                  className="mt-8 mb-2 text-[#A8C7FA] text-[14px] font-normal cursor-pointer hover:underline inline-block"
-                >
-                  {showQuoted ? "Hide quoted text" : "Show quoted text"}
+                  ))}
                 </div>
-
-                <AnimatePresence>
-                  {showQuoted && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="border border-[#36383D] overflow-hidden bg-[#1E1F22] mt-4"
-                      onClick={() => router.push('/simplilearn')}
-                    >
-                      <img
-                        src="/simplilearn.jpg"
-                        alt="Simplilearn Certificate Details"
-                        className="w-full h-auto object-contain block"
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              )}
             </div>
-          </div>
-        ) : (
-          // ==========================================
-          // 2. GENERIC EMAIL LAYOUT (For all other emails)
-          // ==========================================
-          <div className="px-1 mt-4">
-            <div className="flex items-start justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-medium text-xl shrink-0 ${email.avatarColor}`}>
-                  {email.sender.charAt(0).toUpperCase()}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                    <span className="font-medium text-[#E3E3E3] text-[15px] truncate max-w-[200px]">{email.sender}</span>
-                    <span className="text-[13px] text-[#8E918F] hidden md:inline truncate">&lt;{email.senderEmail || 'noreply@domain.com'}&gt;</span>
-                  </div>
-                  <div className="text-[13px] text-[#8E918F]">
-                    to me <span className="ml-1 text-[10px]">▼</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 text-[#8E918F] shrink-0">
-                <span className="text-[13px] whitespace-nowrap">{email.timestamp}</span>
-                <button className="p-2 -mr-2 hover:bg-[#282a2d] rounded-full"><MoreVertical size={20} /></button>
-              </div>
-            </div>
-
-            {/* Render dynamically assigned mock body */}
-            <div className="text-[#E3E3E3] text-[15px] leading-[1.6] whitespace-pre-wrap font-sans font-normal">
-              {email.body}
-            </div>
-
-            {/* Render PDF Attachment Pill if this generic email has one */}
-            {email.attachment && (
-              <div className="mt-8 border border-[#444746] rounded-xl p-4 flex items-center gap-4 bg-[#1E1F22] w-fit cursor-pointer hover:bg-[#282A2D] transition">
-                <div className="w-10 h-10 bg-[#B3261E] rounded flex items-center justify-center text-white font-bold text-xs">
-                  PDF
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-[#E3E3E3]">{email.attachment}.pdf</p>
-                  <p className="text-xs text-[#8E918F]">124 KB</p>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
+          ))}
+        </div>
       </div>
-
-      {/* Fixed Bottom Action Pills (Global) */}
-      <div className="fixed bottom-16 left-0 right-0 bg-[#131314] px-4 py-4 flex items-center gap-3 z-[100]">
-
-        <button className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] font-medium text-[14px] transition-colors active:bg-[#a8bcf0]">
-          <Reply size={20} strokeWidth={1.5} className="transform -scale-x-100" /> Reply
-        </button>
-        <button className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] font-medium text-[14px] transition-colors active:bg-[#a8bcf0]">
-          <Forward size={20} strokeWidth={1.5} /> Forward
-        </button>
-        <button className="flex shrink-0 items-center justify-center p-3.5 bg-[#C3D2F7] rounded-full text-[#041E49] transition-colors active:bg-[#a8bcf0]">
-          <Smile size={16} strokeWidth={1.5} />
-        </button>
-      </div>
-
-      {/* Security Popup Modal (Only accessible via Simplilearn email right now) */}
-      <AnimatePresence>
-        {showSecurityModal && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center px-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="absolute inset-0 bg-black/60"
-              onClick={() => setShowSecurityModal(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="bg-[#282A2D] w-full max-w-[340px] rounded-[28px] p-6 relative z-10 shadow-2xl"
-            >
-              <h2 className="text-[22px] font-normal text-[#E3E3E3] mb-5 tracking-wide">Security details</h2>
-              <div className="flex flex-col gap-[6px] text-[15px] font-normal text-[#E3E3E3] leading-[1.4]">
-                <div>Mailed by: mailer.simplilearn.training</div>
-                <div>Signed by: simplilearn.training</div>
-                <div>
-                  Security: <Lock size={14} className="inline -mt-0.5 mx-0.5 text-[#E3E3E3]" strokeWidth={2} /> Standard encryption <br />
-                  (TLS). <span className="text-[#A8C7FA] cursor-pointer hover:underline">Learn more</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
     </div>
   );

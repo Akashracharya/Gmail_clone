@@ -4,7 +4,6 @@ import { PlayCircle, Clock, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const DashboardSkeleton = () => (
-  // ADDED padding here (px-4 py-6 md:p-8)
   <div className="max-w-5xl mx-auto space-y-8 w-full animate-pulse px-4 py-6 md:p-8">
     <section>
       <div className="h-8 bg-gray-200 rounded-md w-64 mb-4"></div>
@@ -49,12 +48,10 @@ export default function SimplilearnDashboard() {
   const [loadPhase, setLoadPhase] = useState<'spinner' | 'skeleton' | 'content'>('spinner');
 
   useEffect(() => {
-    // Phase 1 to 2: Switch from white screen spinner to skeleton after 2 seconds
     const spinnerTimer = setTimeout(() => {
       setLoadPhase('skeleton');
     }, 2000);
 
-    // Phase 2 to 3: Switch from skeleton to actual content after 4.5 total seconds
     const contentTimer = setTimeout(() => {
       setLoadPhase('content');
     }, 4500);
@@ -65,7 +62,6 @@ export default function SimplilearnDashboard() {
     };
   }, []);
 
-  // --- RENDER PHASE 1: Full White Screen with Circular Spinner ---
   if (loadPhase === 'spinner') {
     return (
       <div className="fixed inset-0 bg-white z-[200] flex flex-col items-center justify-center">
@@ -77,14 +73,11 @@ export default function SimplilearnDashboard() {
     );
   }
 
-  // --- RENDER PHASE 2: Skeleton UI ---
   if (loadPhase === 'skeleton') {
     return <DashboardSkeleton />;
   }
 
-  // --- RENDER PHASE 3: Actual Dashboard ---
   return (
-    // ADDED padding here (px-4 py-6 md:p-8)
     <div className="max-w-5xl mx-auto space-y-8 px-4 py-6 md:p-8">
       <section>
         <h1 className="text-2xl md:text-3xl font-bold text-[#1D2228] mb-2">Welcome back, Akash!</h1>
@@ -95,12 +88,22 @@ export default function SimplilearnDashboard() {
         <h2 className="text-lg font-bold text-[#1D2228] mb-4">Continue Learning</h2>
         <div 
           onClick={() => router.push('/simplilearn/course/vlsi-101')}
-          className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col md:flex-row hover:shadow-md transition-shadow cursor-pointer"
+          className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col md:flex-row hover:shadow-md transition-shadow cursor-pointer group"
         >
-          <div className="w-full md:w-[280px] h-[160px] bg-slate-800 relative flex-shrink-0">
-            <div className="absolute inset-0 flex items-center justify-center opacity-80">
-              <PlayCircle size={48} className="text-white" />
-            </div>
+          <div className="w-full md:w-[280px] h-[160px] bg-slate-800 relative flex-shrink-0 overflow-hidden">
+            
+            {/* THUMBNAIL ADDED HERE */}
+            <img 
+              src="/thumbnail.jpg" 
+              alt="Course Thumbnail" 
+              className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://www.transparenttextures.com/patterns/cubes.png';
+              }}
+            />
+            
+            
+            
             <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
               Module 4
             </div>
@@ -115,11 +118,11 @@ export default function SimplilearnDashboard() {
             
             <div className="mt-auto">
               <div className="flex justify-between text-xs text-gray-600 mb-1 font-medium">
-                <span>75% Completed</span>
+                <span>92% Completed</span>
                 <span>12 hrs left</span>
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-[#188038] w-[75%] rounded-full"></div>
+                <div className="h-full bg-[#188038] w-[92%] rounded-full"></div>
               </div>
             </div>
           </div>

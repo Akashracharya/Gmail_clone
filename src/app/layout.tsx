@@ -20,9 +20,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const isSimplilearnApp = pathname.startsWith('/simplilearn');
 
   return (
-    // Switch completely out of dark mode when in the Simplilearn app
     <html lang="en" className={!isSimplilearnApp ? "dark" : ""}>
-      <body className={`${inter.className} h-screen flex flex-col overflow-hidden ${!isSimplilearnApp ? 'pb-16 md:pb-0 bg-[#131314] text-[#E3E3E3]' : 'bg-[#F8F9FA] text-[#333333]'}`}>
+      <head>
+        {/* THIS PREVENTS PINCH-TO-ZOOM ON MOBILE */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+      </head>
+      
+      {/* ADDED 'touch-manipulation' TO PREVENT DOUBLE-TAP ZOOM */}
+      <body className={`${inter.className} touch-manipulation h-screen flex flex-col overflow-hidden ${!isSimplilearnApp ? 'pb-16 md:pb-0 bg-[#131314] text-[#E3E3E3]' : 'bg-[#F8F9FA] text-[#333333]'}`}>
         <MenuProvider>
           <EmailProvider>
             <MailProvider>
